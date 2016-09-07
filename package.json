@@ -4,6 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "dev": "node dist/refox",
+    "test": "npm run lint",
+    "lint": "node_modules/.bin/eslint index.js lib"
   },
   "repository": {
     "type": "git",
@@ -14,5 +17,20 @@
   "bugs": {
     "url": "https://github.com/fengzilong/refox/issues"
   },
-  "homepage": "https://github.com/fengzilong/refox#readme"
+  "homepage": "https://github.com/fengzilong/refox#readme",
+  "dependencies": {
+    "koa": "^1.2.2"
+  },
+  "devDependencies": {
+    "eslint": "^3.4.0",
+    "eslint-config-airbnb": "^10.0.1",
+    "eslint-plugin-import": "^1.14.0",
+    "eslint-plugin-jsx-a11y": "^2.2.1",
+    "eslint-plugin-react": "^6.2.0",
+    "rollup-plugin-babel": "^2.6.1",
+    "rollup-plugin-commonjs": "^4.1.0",
+    "rollup-plugin-json": "^2.0.2",
+    "rollup-plugin-node-resolve": "^2.0.0",
+    "rollup-plugin-uglify": "^1.0.1"
+  }
 }
