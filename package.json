@@ -1,0 +1,18 @@
+{
+  "name": "refox",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fengzilong/refox.git"
+  },
+  "author": "fengzilong",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/fengzilong/refox/issues"
+  },
+  "homepage": "https://github.com/fengzilong/refox#readme"
+}
