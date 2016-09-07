@@ -8971,8 +8971,11 @@ const loaders = function (options) {
 var index = (options => {
 	const app = application();
 	app.use(loaders(options));
-	console.log(options.port);
-	app.listen(options.port);
+	console.log(options.port, typeof options.port);
+	const server = app.listen(options.port, () => {
+		console.log(`listening on port: ${ options.port }`);
+		console.log(server);
+	});
 });
 
 module.exports = index;

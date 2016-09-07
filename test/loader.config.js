@@ -5,7 +5,7 @@ const cwd = process.cwd();
 // 进行更深层次的抽象，不直接支持proxy，自行通过mock中的resolve处理(例如：假如NODE_ENV是REMOTE，则取remote数据，proxy配置不放在refox配置上)
 
 module.exports = {
-	port: 6000,
+	port: 5000,
 	// 这里是mock数据
 	// 需要代理的也只有这两处，而且同步数据源和异步数据源本质上是一样的
 	// 所以单独抽离出来，loader只负责编译or修改内容，无需去管数据的来源
@@ -20,13 +20,15 @@ module.exports = {
 			}
 		},
 		async: {
-			test: /ajax/, // or function
-			resolve: function() {
+			test: /ajax-url/, // or function
+			resolve: function( url, req ) {
 				// 可在这里做同步数据的代理，或者查找本地routeMap
 			}
 		},
 	},
 	// 类似拦截器，但这里不负责mock数据的输出，只是响应请求，动态编译源码或者进行一些修改(比如注入一个脚本)
+	// 优先级低于上面的mock，也就是说以下都是非mock的↓本地实体文件↓
+	// 一般是js、css等文件
 	// 需要注意的是，如果匹配到compile中的某一项，那么后面的compile就不会再处理了
 	compile: [
 		{
