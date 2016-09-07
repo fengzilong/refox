@@ -1,12 +1,13 @@
 import koa from 'koa';
 import loaders from './lib/loaders';
 
+// TODO: delete
+import options from './test/loader.config';
+
 const app = koa();
 
-app.use( function* () {
-	this.body = 'hello world!';
-} );
+app.use( loaders( options ) );
 
-app.use( loaders );
+console.log( options.port );
 
 app.listen( 3000 );

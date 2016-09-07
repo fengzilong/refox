@@ -17,7 +17,7 @@ export default {
 	],
 	targets: [
 		{
-			dest: 'dist/refox.js',
+			dest: 'refox.js',
 			format: 'cjs'
 		}
 	]
