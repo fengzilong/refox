@@ -8904,16 +8904,16 @@ var parseQuery = (query => {
 	return ret;
 });
 
-const loaders = function (allOptions) {
-	const options = allOptions.loaders;
+const loaders = function (options) {
+	const compilers = options.compile;
 
 	return function* (next) {
-		for (let i = 0, len = options.length; i < len; i++) {
-			let option = options[i];
+		for (let i = 0, len = compilers.length; i < len; i++) {
+			let compiler = compilers[i];
 			let request = this.request;
-			if (option.test(request)) {
-				let content = option.content && option.content(request);
-				let filepath = option.local && option.local(request);
+			if (compiler.test(request.url, request)) {
+				let content = compiler.content && compiler.content(request.url, request);
+				let filepath = compiler.local && compiler.local(request.url, request);
 				let body;
 
 				if (content) {
@@ -8929,7 +8929,7 @@ const loaders = function (allOptions) {
 					return yield next;
 				}
 
-				const loaders = option.loaders;
+				const loaders = compiler.loaders;
 
 				let promise = Promise.resolve(body);
 
@@ -8941,7 +8941,7 @@ const loaders = function (allOptions) {
 					let loader = require(loaderPath);
 					promise = promise.then(body => {
 						return loader.call({
-							options: allOptions,
+							options: options,
 							query: parseQuery(loaderQuery) || {},
 							filepath: filepath,
 							set: this.set.bind(this),
@@ -8960,41 +8960,19 @@ const loaders = function (allOptions) {
 				});
 
 				yield promise;
-				yield next;
+				// 在当前compiler截断，不再继续往下传递，也不继续查找下一个compiler
+				// yield next;
+				break;
 			}
 		}
 	};
 };
 
-const cwd = process.cwd();
+var index = (options => {
+	const app = application();
+	app.use(loaders(options));
+	console.log(options.port);
+	app.listen(options.port);
+});
 
-var options = {
-	port: 6000,
-	static: [],
-	loaders: [{
-		test: function (req) {
-			if (/xxx/.test(req.url)) {
-				return true;
-			}
-
-			if (/yyy/.test(req.url)) {
-				return true;
-			}
-		},
-		loaders: ['pug?root=' + path.resolve(cwd, 'test/fixtures/views&data=' + path.resolve(cwd, 'test/fixtures/data'))],
-		local: function (req) {
-			return path.resolve(cwd, 'test/fixtures/views/test.pug');
-		},
-		content: function (req) {
-			return false;
-		}
-	}]
-};
-
-const app = application();
-
-app.use(loaders(options));
-
-console.log(options.port);
-
-app.listen(3000);
+module.exports = index;

@@ -1,1 +1,4 @@
-console.log( require.resolve( 'eslint' ) );
+const refox = require( './refox' );
+const options = require( './test/loader.config' );
+
+refox( options );
