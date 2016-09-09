@@ -1,9 +1,15 @@
 import koa from 'koa';
-import loaders from './lib/loaders';
+import loader from './lib/loader';
+import mock from './lib/mock';
+import serve from './lib/serve';
 
 export default options => {
 	const app = koa();
-	app.use( loaders( options ) );
+
+	// middlewares
+	app.use( loader( options ) );
+	app.use( mock( options.mock ) );
+	app.use( serve( options.static ) );
 
 	const server = app.listen( options.port, () => {
 		console.log( `listening on port: ${options.port}` );
