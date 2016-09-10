@@ -5,6 +5,13 @@ import nodeResolve from 'rollup-plugin-node-resolve';
 
 export default {
 	entry: 'index.js',
+	external: [
+		'koa',
+		'mz/fs',
+		'koa-static',
+		'koa-compose',
+		'koa-logger'
+	],
 	plugins: [
 		nodeResolve({
 			main: true

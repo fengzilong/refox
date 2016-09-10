@@ -8,8 +8,8 @@
     "build-watch": "nodemon -x \"npm run build\" --watch index.js --watch lib --watch test",
     "start-watch": "nodemon -x \"npm run start\" --watch refox.js",
     "build": "rollup -c",
-    "start": "node refox",
-    "debug": "node-debug refox",
+    "start": "node test",
+    "debug": "node-debug test",
     "test": "npm run lint",
     "lint": "node_modules/.bin/eslint index.js lib"
   },
@@ -25,6 +25,9 @@
   "homepage": "https://github.com/fengzilong/refox#readme",
   "dependencies": {
     "koa": "^1.2.2",
+    "koa-compose": "^2.4.0",
+    "koa-logger": "^1.3.0",
+    "koa-static": "^2.0.0",
     "mz": "^2.4.0"
   },
   "devDependencies": {

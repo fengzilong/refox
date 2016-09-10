@@ -4,15 +4,25 @@ const cwd = process.cwd();
 
 module.exports = {
 	port: 5000,
+	cache: true,
+	verbose: true,
 	mock: {
 		sync: {
-			test: /template-url/,
+			test: function( url, req ) {
+				if( /sync/.test(  ) ) {
+					return true;
+				}
+			},
 			resolve: function( url, req ) {
 				// TODO
 			}
 		},
 		async: {
-			test: /ajax-url/,
+			test: function( url, req ) {
+				if( /async/.test( url ) ) {
+					return true
+				}
+			},
 			resolve: function( url, req ) {
 				// TODO
 			}
@@ -38,6 +48,6 @@ module.exports = {
 		}
 	],
 	static: [
-
+		'lib'
 	],
 };
