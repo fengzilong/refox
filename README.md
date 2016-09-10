@@ -8,6 +8,12 @@
 
 still work in progress ;)
 
+## Installation
+
+```bash
+$ npm i refox -g
+```
+
 ## License
 
 MIT &copy; [fengzilong](https://github.com/fengzilong)
