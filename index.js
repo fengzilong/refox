@@ -14,7 +14,7 @@ export default options => {
 	app.use( mock( options.mock ) );
 	app.use( serve( options.static ) );
 
-	const server = app.listen( options.port, () => {
+	app.listen( options.port, () => {
 		console.log( `listening on port: ${options.port}` );
 	} );
 };

@@ -9,7 +9,7 @@ module.exports = {
 	mock: {
 		sync: {
 			test: function( url, req ) {
-				if( /sync/.test(  ) ) {
+				if( /sync/.test( url ) ) {
 					return true;
 				}
 			},

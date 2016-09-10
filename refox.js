@@ -19,17 +19,18 @@ var resolveLoader = (loaderName => `refox-loader-${ loaderName }`);
  * }
  */
 var parseQuery = (query => {
-	query = String(query);
-	let ret = {};
-	let tmp = query.split('&');
-	for (let i = 0, len = tmp.length; i < len; i++) {
-		let tmp2 = tmp[i].split('=');
-		let key = tmp2[0];
-		let value = tmp2[1];
+	const queryStr = String(query);
+	const ret = {};
+	const tmp = queryStr.split('&');
 
-		// convert number
+	for (let i = 0, len = tmp.length; i < len; i++) {
+		const pair = tmp[i].split('=');
+		const key = pair[0];
+		let value = pair[1];
+
+		// convert into number
 		if (/^\d+$/.test(value)) {
-			value = parseInt(value);
+			value = parseInt(value, 10);
 		} else if (/^[\d\.]+$/.test(value)) {
 			value = parseFloat(value);
 		}
@@ -39,18 +40,19 @@ var parseQuery = (query => {
 	return ret;
 });
 
-const loader = function (options) {
+function loader (options) {
 	const compilers = options.compile;
 
 	return function* (next) {
 		const request = this.request;
 		let matched = false;
+		let compiler;
 
 		for (let i = 0, len = compilers.length; i < len; i++) {
-			let compiler = compilers[i];
+			compiler = compilers[i];
 			if (compiler.test(request.url, request)) {
-				let content = compiler.content && compiler.content(request.url, request);
-				let filepath = compiler.local && compiler.local(request.url, request);
+				const content = compiler.content && compiler.content(request.url, request);
+				const filepath = compiler.local && compiler.local(request.url, request);
 				let body;
 
 				if (content) {
@@ -62,45 +64,42 @@ const loader = function (options) {
 
 				body = String(body);
 
-				if (!body) {
-					continue;
-				}
+				// test通过，且body不为空
+				if (body) {
+					matched = true;
 
-				matched = true;
+					const loaders = compiler.loaders;
 
-				const loaders = compiler.loaders;
-
-				let promise = Promise.resolve(body);
-				for (let i = 0, len = loaders.length; i < len; i++) {
-					let loaderString = loaders[i];
-					let loaderName = loaderString.split('?')[0];
-					let loaderQuery = loaderString.split('?')[1];
-					let loaderPackageName = resolveLoader(loaderName);
-					let loader = require(loaderPackageName);
-					promise = promise.then(body => {
-						return loader.call({
-							options: options,
+					let promise = Promise.resolve(body);
+					for (let j = 0, loaderLen = loaders.length; j < loaderLen; j++) {
+						const loaderString = loaders[j];
+						const loaderName = loaderString.split('?')[0];
+						const loaderQuery = loaderString.split('?')[1];
+						const loaderPackageName = resolveLoader(loaderName);
+						const loader = require(loaderPackageName);
+						promise = promise.then(v => loader.call({
+							options,
+							filepath,
 							query: parseQuery(loaderQuery) || {},
-							filepath: filepath,
 							set: this.set.bind(this),
 							get: this.get.bind(this)
-						}, body);
+						}, v));
+					}
+
+					promise.then(v => {
+						// console.log( 'received from loaders', v );
+						this.body = v;
 					});
+
+					promise.catch(err => {
+						throw err;
+					});
+
+					yield promise;
+					// 在当前compiler截断，不再继续往下传递，也不继续查找下一个compiler
+					// yield next;
+					break;
 				}
-
-				promise.then(body => {
-					// console.log( 'received from loaders', body );
-					this.body = body;
-				});
-
-				promise.catch(err => {
-					throw err;
-				});
-
-				yield promise;
-				// 在当前compiler截断，不再继续往下传递，也不继续查找下一个compiler
-				// yield next;
-				break;
 			}
 		}
 
@@ -108,15 +107,9 @@ const loader = function (options) {
 			yield next;
 		}
 	};
-};
+}
 
-const ensureArray = v => {
-	if (Array.isArray(v)) {
-		return v;
-	}
-
-	return [v];
-};
+const ensureArray = v => Array.isArray(v) ? v : [v];
 
 var mock = (mockOptions => {
 	const syncProviders = ensureArray(mockOptions.sync);
@@ -129,18 +122,15 @@ var mock = (mockOptions => {
 });
 
 var serve$1 = (paths => {
-	let serves = [];
-	let serveOptions = {};
+	const serves = [];
+	const serveOptions = {};
 	for (let i = 0, len = paths.length; i < len; i++) {
-		console.log(paths[i]);
 		serves.push(serve(paths[i], serveOptions));
 	}
 	return compose(serves);
 });
 
-var logger$1 = (options => {
-	return logger(options || {});
-});
+var logger$1 = (options => logger(options || {}));
 
 var index = (options => {
 	const app = koa();
@@ -151,7 +141,7 @@ var index = (options => {
 	app.use(mock(options.mock));
 	app.use(serve$1(options.static));
 
-	const server = app.listen(options.port, () => {
+	app.listen(options.port, () => {
 		console.log(`listening on port: ${ options.port }`);
 	});
 });

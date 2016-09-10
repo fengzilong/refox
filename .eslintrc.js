@@ -2,12 +2,14 @@ module.exports = {
 	extends: 'airbnb',
 	rules: {
 		'linebreak-style': 'off',
-		'indent': ['error', 'tab'],
+		'indent': [ 'error', 'tab' ],
 		'max-len': 'warn',
 		'func-names': 'off',
 		'vars-on-top': 'off',
 		'one-var': 'off',
-		'space-in-parens': ["error", "always"],
+		'space-in-parens': [ 'error', 'always' ],
+		'computed-property-spacing': [ 'error', 'always' ],
+		'array-bracket-spacing': [ 'error', 'always' ],
 		// es6
 		'require-yield': 'warn',
 	},
@@ -16,6 +18,6 @@ module.exports = {
 		es6: true
 	},
 	globals: {
-		
+
 	}
 };
