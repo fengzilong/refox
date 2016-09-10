@@ -3,15 +3,12 @@ import babel from 'rollup-plugin-babel';
 import commonjs from 'rollup-plugin-commonjs';
 import nodeResolve from 'rollup-plugin-node-resolve';
 
+const pkg = require( './package.json' );
+const external = Object.keys( pkg.dependencies );
+
 export default {
 	entry: 'index.js',
-	external: [
-		'koa',
-		'mz/fs',
-		'koa-static',
-		'koa-compose',
-		'koa-logger'
-	],
+	external: external,
 	plugins: [
 		nodeResolve({
 			main: true
@@ -20,11 +17,23 @@ export default {
 			include: 'node_modules/**'
 		}),
 		json(),
-		babel()
+		babel({
+			exclude: 'node_modules/**',
+			babelrc: false,
+			presets: [
+				[
+					"es2015",
+					{
+						"modules": false
+					}
+				]
+			],
+			plugins: [ "transform-regenerator" ]
+		})
 	],
 	targets: [
 		{
-			dest: 'refox.js',
+			dest: pkg.main,
 			format: 'cjs'
 		}
 	]

@@ -1,5 +1,5 @@
+import 'regenerator-runtime/runtime';
 import koa from 'koa';
-
 import loader from './lib/loader';
 import mock from './lib/mock';
 import serve from './lib/serve';
