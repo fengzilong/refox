@@ -9,7 +9,6 @@
     "start-watch": "nodemon -x \"npm run start\" --watch refox.js",
     "build": "rollup -c",
     "start": "node test",
-    "debug": "node-debug test",
     "test": "npm run lint",
     "lint": "node_modules/.bin/eslint index.js lib"
   },

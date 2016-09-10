@@ -15,6 +15,7 @@ module.exports = {
 			},
 			resolve: function( url, req ) {
 				// TODO
+				return '123';
 			}
 		},
 		async: {
@@ -25,6 +26,7 @@ module.exports = {
 			},
 			resolve: function( url, req ) {
 				// TODO
+				return '321';
 			}
 		},
 	},
