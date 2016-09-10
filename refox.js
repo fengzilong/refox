@@ -1799,17 +1799,12 @@ var each = (function (v, fn) {
 		throw new Error('[utils/each] fn must be function');
 	}
 
-	if (Array.isArray(v)) {
-		for (var i = 0, len = v.length; i < len; i++) {
-			if (fn(v[i], i, v) === false) {
-				break;
-			}
-		}
-	} else {
-		for (var _i in v) {
-			if (fn(v[_i], _i, v) === false) {
-				break;
-			}
+	var keys = Object.keys(v);
+
+	for (var i = 0, len = keys.length; i < len; i++) {
+		var key = keys[i];
+		if (fn(v[key], key, v) === false) {
+			break;
 		}
 	}
 });
@@ -1969,9 +1964,11 @@ function loader (options) {
 	});
 }
 
+/* eslint no-unused-vars: "off" */
+
 function syncProvider(providers) {
 	return Promise.resolve();
-};
+}
 
 function asyncProvider(providers) {
 	var _this = this;
@@ -2006,6 +2003,8 @@ function asyncProvider(providers) {
 			}
 			return false;
 		}
+
+		return true;
 	});
 
 	if (!matched) {
@@ -2015,7 +2014,7 @@ function asyncProvider(providers) {
 	return promise.then(function (content) {
 		_this.body = content;
 	});
-};
+}
 
 var mock = (function (mockOptions) {
 	return regeneratorRuntime.mark(function _callee(next) {
