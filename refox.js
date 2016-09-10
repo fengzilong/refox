@@ -1815,27 +1815,28 @@ function loader (options) {
 	return regeneratorRuntime.mark(function _callee2(next) {
 		var _this = this;
 
-		var request, matched, compiler, i, len, _ret;
+		var request, syncData, matched, compiler, i, len, _ret;
 
 		return regeneratorRuntime.wrap(function _callee2$(_context2) {
 			while (1) {
 				switch (_context2.prev = _context2.next) {
 					case 0:
 						request = this.request;
+						syncData = this.state.syncData || {};
 						matched = false;
 						compiler = void 0;
 						i = 0, len = compilers.length;
 
-					case 4:
+					case 5:
 						if (!(i < len)) {
-							_context2.next = 14;
+							_context2.next = 15;
 							break;
 						}
 
 						compiler = compilers[i];
 
 						if (!compiler.test(request.url, request)) {
-							_context2.next = 11;
+							_context2.next = 12;
 							break;
 						}
 
@@ -1895,6 +1896,7 @@ function loader (options) {
 												var loader = require(loaderPackageName);
 												promise = promise.then(function (v) {
 													return loader.call({
+														syncData: syncData,
 														options: options,
 														filepath: filepath,
 														query: parseQuery(loaderQuery) || {},
@@ -1929,33 +1931,33 @@ function loader (options) {
 									}
 								}
 							}, _callee, _this);
-						})(), 't0', 8);
+						})(), 't0', 9);
 
-					case 8:
+					case 9:
 						_ret = _context2.t0;
 
 						if (!(_ret === 'break')) {
-							_context2.next = 11;
+							_context2.next = 12;
 							break;
 						}
 
-						return _context2.abrupt('break', 14);
+						return _context2.abrupt('break', 15);
 
-					case 11:
+					case 12:
 						i++;
-						_context2.next = 4;
+						_context2.next = 5;
 						break;
 
-					case 14:
+					case 15:
 						if (matched) {
-							_context2.next = 17;
+							_context2.next = 18;
 							break;
 						}
 
-						_context2.next = 17;
+						_context2.next = 18;
 						return next;
 
-					case 17:
+					case 18:
 					case 'end':
 						return _context2.stop();
 				}
@@ -1964,10 +1966,56 @@ function loader (options) {
 	});
 }
 
-/* eslint no-unused-vars: "off" */
-
 function syncProvider(providers) {
-	return Promise.resolve();
+	var _this = this;
+
+	var request = this.request;
+	var url = request.url;
+
+	var done = void 0;
+	var fail = void 0;
+	var promise = new Promise(function (resolve, reject) {
+		done = resolve;
+		fail = reject;
+	});
+
+	var matched = false;
+
+	each(providers, function (provider) {
+		var test = provider.test;
+		var resolve = provider.resolve.bind({
+			async: function async() {
+				return function (content) {
+					return content instanceof Error ? fail(content) : done(content);
+				};
+			}
+		});
+
+		if (test(url, request)) {
+			matched = true;
+			var content = resolve(url, request);
+			if (typeof content !== 'undefined') {
+				done(content);
+			}
+			return false;
+		}
+
+		return true;
+	});
+
+	// this.state.syncData提供给后面的loaders使用
+	if (!matched) {
+		this.state.syncData = {};
+		return Promise.resolve();
+	}
+
+	return promise.then(function (content) {
+		try {
+			_this.state.syncData = JSON.parse(content);
+		} catch (e) {
+			_this.state.syncData = {};
+		}
+	});
 }
 
 function asyncProvider(providers) {
@@ -2060,8 +2108,8 @@ var index = (function (options) {
 
 	// middlewares
 	app.use(logger$1());
-	app.use(loader(options));
 	app.use(mock(options.mock));
+	app.use(loader(options));
 	app.use(serve$1(options.static));
 
 	app.listen(options.port, function () {

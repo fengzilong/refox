@@ -7,17 +7,6 @@ module.exports = {
 	cache: true,
 	verbose: true,
 	mock: {
-		sync: {
-			test: function( url, req ) {
-				if( /sync/.test( url ) ) {
-					return true;
-				}
-			},
-			resolve: function( url, req ) {
-				// TODO
-				return '123';
-			}
-		},
 		async: {
 			test: function( url, req ) {
 				if( /async/.test( url ) ) {
@@ -27,6 +16,17 @@ module.exports = {
 			resolve: function( url, req ) {
 				// TODO
 				return '321';
+			}
+		},
+		sync: {
+			test: function( url, req ) {
+				if( /sync/.test( url ) ) {
+					return true;
+				}
+			},
+			resolve: function( url, req ) {
+				// TODO
+				return '{ "a": 123 }';
 			}
 		},
 	},

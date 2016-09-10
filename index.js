@@ -10,8 +10,8 @@ export default options => {
 
 	// middlewares
 	app.use( logger() );
-	app.use( loader( options ) );
 	app.use( mock( options.mock ) );
+	app.use( loader( options ) );
 	app.use( serve( options.static ) );
 
 	app.listen( options.port, () => {
