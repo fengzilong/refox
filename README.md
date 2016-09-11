@@ -4,7 +4,7 @@
 [![npm][version-image]][version-url]
 [![license][license-image]][license-url]
 
-> mock mock mock!
+> What does the fox say?
 
 still work in progress ;)
 
