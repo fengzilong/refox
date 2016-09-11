@@ -4,9 +4,22 @@ const cwd = process.cwd();
 
 module.exports = {
 	port: 5000,
-	cache: true,
 	verbose: true,
+	debug: true,
 	mock: {
+		sync: {
+			test: function( url, req ) {
+				if( /xxx/.test( url ) ) {
+					return true;
+				}
+			},
+			resolve: function( url, req ) {
+				var cb = this.async();
+				setTimeout(function() {
+					cb( '{ "youAreUsingPug": true, "foo": "bar" }' );
+				}, 1000);
+			}
+		},
 		async: {
 			test: function( url, req ) {
 				if( /async/.test( url ) ) {
@@ -14,19 +27,10 @@ module.exports = {
 				}
 			},
 			resolve: function( url, req ) {
-				// TODO
-				return '321';
-			}
-		},
-		sync: {
-			test: function( url, req ) {
-				if( /sync/.test( url ) ) {
-					return true;
-				}
-			},
-			resolve: function( url, req ) {
-				// TODO
-				return '{ "a": 123 }';
+				var cb = this.async();
+				setTimeout(function() {
+					cb( '321 delayed' );
+				}, 1000);
 			}
 		},
 	},

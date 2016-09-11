@@ -1894,15 +1894,33 @@ function loader (options) {
 												var loaderQuery = loaderString.split('?')[1];
 												var loaderPackageName = resolveLoader(loaderName);
 												var loader = require(loaderPackageName);
+
 												promise = promise.then(function (v) {
-													return loader.call({
-														syncData: syncData,
+													var done = void 0;
+													var fail = void 0;
+													var p = new Promise(function (resolve, reject) {
+														done = resolve;
+														fail = reject;
+													});
+
+													var content = loader.call({
 														options: options,
 														filepath: filepath,
+														data: syncData,
 														query: parseQuery(loaderQuery) || {},
+														async: function async() {
+															return function (content) {
+																return content instanceof Error ? fail(content) : done(content);
+															};
+														},
 														set: _this.set.bind(_this),
 														get: _this.get.bind(_this)
 													}, v);
+													// 如果有return内容，直接done
+													if (typeof content !== 'undefined') {
+														done(content);
+													}
+													return p;
 												});
 											};
 
