@@ -1,13 +1,14 @@
 <p align="center">
 	<img src="https://ooo.0o0.ooo/2016/09/09/57d2d4c79112f.png" alt="refox" width="190px">
 
-	<br /><br />Lightweight mock server on top of koa
-	<br /><br />
+	<br /><br />Lightweight mock server on top of <a href="https://github.com/koajs/koa">koa</a>
+</p>
 
-	[![npm][version-image]][version-url]
-	[![build][build-image]][build-url]
-	[![David][dependency-image]][dependency-url]
-	[![license][license-image]][license-url]
+<p align="center">
+	<a href="https://www.npmjs.org/package/refox"><img src="https://img.shields.io/npm/v/refox.svg?style=flat-square" alt="npm"></a>
+	<a href="https://circleci.com/gh/fengzilong/refox"><img src="https://img.shields.io/circleci/project/fengzilong/refox/master.svg?style=flat-square" alt="build"></a>
+	<a href="https://david-dm.org/fengzilong/refox"><img src="https://img.shields.io/david/fengzilong/refox.svg?style=flat-square" alt="David"></a>
+	<a href="https://github.com/fengzilong/refox/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-MIT-000000.svg?style=flat-square" alt="license"></a>
 </p>
 
 ## Installation
