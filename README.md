@@ -1,6 +1,7 @@
 <img src="https://ooo.0o0.ooo/2016/09/09/57d2d4c79112f.png" alt="refox" width="190px">
 
 [![build][build-image]][build-url]
+[![David][dependency-image]][dependency-url]
 [![npm][version-image]][version-url]
 [![license][license-image]][license-url]
 
@@ -20,6 +21,9 @@ MIT &copy; [fengzilong](https://github.com/fengzilong)
 
 [build-image]: https://img.shields.io/circleci/project/fengzilong/refox/master.svg?style=flat-square
 [build-url]: https://circleci.com/gh/fengzilong/refox
+
+[dependency-image]: https://img.shields.io/david/fengzilong/refox.svg?style=flat-square
+[dependency-url]: https://david-dm.org/fengzilong/refox
 
 [version-image]: https://img.shields.io/npm/v/refox.svg?style=flat-square
 [version-url]: https://www.npmjs.org/package/refox
