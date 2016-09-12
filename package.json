@@ -1,7 +1,7 @@
 {
   "name": "refox",
   "version": "0.0.1",
-  "description": "",
+  "description": "lightweight mock server on top of koa",
   "main": "refox.js",
   "bin": {
     "refox": "bin/refox.js"
