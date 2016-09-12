@@ -13,6 +13,8 @@
 
 ## Installation
 
+[![Join the chat at https://gitter.im/fengzilong/refox](https://badges.gitter.im/fengzilong/refox.svg)](https://gitter.im/fengzilong/refox?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 ```bash
 $ npm i refox -g
 ```
