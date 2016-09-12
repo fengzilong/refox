@@ -1,7 +1,5 @@
 const path = require( 'path' );
 
-const cwd = process.cwd();
-
 module.exports = {
 	port: 5000,
 	verbose: true,

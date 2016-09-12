@@ -5,7 +5,7 @@ import mock from './lib/mock';
 import serve from './lib/serve';
 import logger from './lib/logger';
 
-export default options => {
+export default ( options, cb ) => {
 	const app = koa();
 
 	// middlewares
@@ -14,7 +14,5 @@ export default options => {
 	app.use( loader( options ) );
 	app.use( serve( options.static ) );
 
-	app.listen( options.port, () => {
-		console.log( `listening on port: ${options.port}` );
-	} );
+	app.listen( options.port, typeof cb === 'function' ? cb : () => {} );
 };
