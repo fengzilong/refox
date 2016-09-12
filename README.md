@@ -19,9 +19,9 @@ $ npm i refox -g
 
 ## Usage
 
-**Step 1:** create config in your project root
+**Step 1:** create config file in your project root
 
-refox.config.js
+`refox.config.js`
 
 ```js
 const path = require( 'path' );
