@@ -3,7 +3,9 @@
   "version": "0.0.0",
   "description": "",
   "main": "refox.js",
-  "bin": "cli.js",
+  "bin": {
+    "refox": "bin/refox.js"
+  },
   "scripts": {
     "dev": "concurrently --kill-others \"npm run build-watch\" \"npm run start-watch\"",
     "build-watch": "nodemon -x \"npm run build\" --watch index.js --watch lib --watch test",
@@ -24,6 +26,7 @@
   },
   "homepage": "https://github.com/fengzilong/refox#readme",
   "dependencies": {
+    "commander": "^2.9.0",
     "debug": "^2.2.0",
     "koa": "^1.2.2",
     "koa-compose": "^2.4.0",

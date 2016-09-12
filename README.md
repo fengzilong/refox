@@ -92,6 +92,21 @@ you can also specify config file by using
 $ refox -c file.config.js
 ```
 
+## CLI
+
+```bash
+Usage: refox [options]
+
+lightweight mock server on top of koa
+
+Options:
+
+  -h, --help           output usage information
+  -V, --version        output the version number
+  -c, --config <path>  specify config file path
+  -d, --debug          enable debug mode
+```
+
 ## License
 
 MIT &copy; [fengzilong](https://github.com/fengzilong)
