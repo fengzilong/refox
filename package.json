@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "description": "",
   "main": "refox.js",
+  "bin": "cli.js",
   "scripts": {
     "dev": "concurrently --kill-others \"npm run build-watch\" \"npm run start-watch\"",
     "build-watch": "nodemon -x \"npm run build\" --watch index.js --watch lib --watch test",
@@ -23,12 +24,15 @@
   },
   "homepage": "https://github.com/fengzilong/refox#readme",
   "dependencies": {
+    "debug": "^2.2.0",
     "koa": "^1.2.2",
     "koa-compose": "^2.4.0",
     "koa-logger": "^1.3.0",
     "koa-static": "^2.0.0",
     "mz": "^2.4.0",
-    "regenerator-runtime": "^0.9.5"
+    "regenerator-runtime": "^0.9.5",
+    "resolve-cwd": "^1.0.0",
+    "update-notifier": "^1.0.2"
   },
   "devDependencies": {
     "babel-plugin-transform-regenerator": "^6.14.0",

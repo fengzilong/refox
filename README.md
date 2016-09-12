@@ -17,7 +17,7 @@
 $ npm i refox -g
 ```
 
-## Usage
+## Setup
 
 **Step 1:** create config file in your project root
 
@@ -25,7 +25,6 @@ $ npm i refox -g
 
 ```js
 const path = require( 'path' );
-const cwd = process.cwd();
 
 module.exports = {
 	port: 5000,
@@ -66,11 +65,11 @@ module.exports = {
 				}
 			},
 			loaders: [
-				'pug?root=' + path.resolve( cwd, 'test/fixtures/views' )
+				'pug?root=' + path.resolve( __dirname, 'fixtures/views' )
 			],
 			// find your local file
 			local: function( url, req ) {
-				return path.resolve( cwd, 'test/fixtures/views/test.pug' );
+				return path.resolve( __dirname, 'fixtures/views/test.pug' );
 			}
 		}
 	],
