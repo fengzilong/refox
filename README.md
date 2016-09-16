@@ -31,8 +31,9 @@ module.exports = {
 	port: 5000,
 	verbose: true,
 	debug: true,
-	mock: {
-		sync: {
+	mock: [
+		{
+			sync: true,
 			test: function( url, req ) {
 				if( /sync/.test( url ) ) {
 					return true;
@@ -43,7 +44,7 @@ module.exports = {
 				return '{ "foo": "bar" }';
 			}
 		},
-		async: {
+		{
 			test: function( url, req ) {
 				if( /async/.test( url ) ) {
 					return true
@@ -56,8 +57,8 @@ module.exports = {
 					cb( '123' );
 				}, 1000);
 			}
-		},
-	},
+		}
+	],
 	compile: [
 		{
 			test: function( url, req ) {

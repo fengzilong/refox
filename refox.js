@@ -1981,26 +1981,25 @@ function loader (options) {
 }
 
 function provider (options) {
-	var providers = options;
-	var request = this.request;
-	var url = request.url;
-
-	var done = void 0;
-	var fail = void 0;
-	var promise = new Promise(function (resolve, reject) {
-		done = resolve;
-		fail = reject;
-	});
-
 	return regeneratorRuntime.mark(function _callee(next) {
 		var _this = this;
 
-		var matched;
+		var providers, request, url, done, fail, promise, matched, isSync;
 		return regeneratorRuntime.wrap(function _callee$(_context) {
 			while (1) {
 				switch (_context.prev = _context.next) {
 					case 0:
+						providers = options;
+						request = this.request;
+						url = request.url;
+						done = void 0;
+						fail = void 0;
+						promise = new Promise(function (resolve, reject) {
+							done = resolve;
+							fail = reject;
+						});
 						matched = false;
+						isSync = false;
 
 
 						each(providers, function (provider) {
@@ -2015,6 +2014,8 @@ function provider (options) {
 
 							if (test(url, request)) {
 								matched = true;
+								isSync = provider.sync;
+
 								var content = resolve(url, request);
 								if (typeof content !== 'undefined') {
 									done(content);
@@ -2040,21 +2041,27 @@ function provider (options) {
 							return true;
 						});
 
-						if (matched) {
-							_context.next = 6;
+						if (!matched) {
+							_context.next = 12;
 							break;
 						}
 
-						_context.next = 5;
+						_context.next = 12;
+						return promise;
+
+					case 12:
+						if (!(!matched || matched && isSync)) {
+							_context.next = 16;
+							break;
+						}
+
+						_context.next = 15;
 						return next;
 
-					case 5:
+					case 15:
 						return _context.abrupt('return', _context.sent);
 
-					case 6:
-						return _context.abrupt('return', promise);
-
-					case 7:
+					case 16:
 					case 'end':
 						return _context.stop();
 				}
@@ -2063,23 +2070,9 @@ function provider (options) {
 	});
 }
 
-var mock = (function (mockOptions) {
-	return regeneratorRuntime.mark(function _callee(next) {
-		return regeneratorRuntime.wrap(function _callee$(_context) {
-			while (1) {
-				switch (_context.prev = _context.next) {
-					case 0:
-						_context.next = 2;
-						return provider.call(this, mockOptions).call(this, next);
-
-					case 2:
-					case 'end':
-						return _context.stop();
-				}
-			}
-		}, _callee, this);
-	});
-});
+function mock (mockOptions) {
+	return provider(mockOptions);
+};
 
 var serve$1 = (function (paths) {
 	var serves = [];
