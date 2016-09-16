@@ -7,7 +7,7 @@
 <p align="center">
 	<a href="https://www.npmjs.org/package/refox"><img src="https://img.shields.io/npm/v/refox.svg?style=flat-square" alt="npm"></a>
 	<a href="https://circleci.com/gh/fengzilong/refox"><img src="https://img.shields.io/circleci/project/fengzilong/refox/master.svg?style=flat-square" alt="build"></a>
-	<a href="https://david-dm.org/fengzilong/refox"><img src="https://img.shields.io/david/fengzilong/refox.svg?style=flat-square" alt="David"></a>
+	<a href="https://david-dm.org/fengzilong/refox"><img src="https://img.shields.io/david/fengzilong/refox.svg?style=flat-square" alt="dependencies"></a>
 	<a href="https://gitter.im/fengzilong/refox"><img src="https://img.shields.io/gitter/room/nwjs/nw.js.svg?style=flat-square" alt="Gitter"></a>
 	<a href="https://github.com/fengzilong/refox/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-MIT-000000.svg?style=flat-square" alt="license"></a>
 </p>

@@ -1754,10 +1754,6 @@ var resolveLoader = (function (loaderName) {
   return "refox-loader-" + loaderName;
 });
 
-var ensureArray = function ensureArray(v) {
-  return Array.isArray(v) ? v : [v];
-};
-
 /**
  * `a=b&c=123`
  * ->
@@ -1984,9 +1980,8 @@ function loader (options) {
 	});
 }
 
-function syncProvider(providers) {
-	var _this = this;
-
+function provider (options) {
+	var providers = options;
 	var request = this.request;
 	var url = request.url;
 
@@ -1997,88 +1992,74 @@ function syncProvider(providers) {
 		fail = reject;
 	});
 
-	var matched = false;
+	return regeneratorRuntime.mark(function _callee(next) {
+		var _this = this;
 
-	each(providers, function (provider) {
-		var test = provider.test;
-		var resolve = provider.resolve.bind({
-			async: function async() {
-				return function (content) {
-					return content instanceof Error ? fail(content) : done(content);
-				};
+		var matched;
+		return regeneratorRuntime.wrap(function _callee$(_context) {
+			while (1) {
+				switch (_context.prev = _context.next) {
+					case 0:
+						console.log('---');
+						matched = false;
+
+
+						each(providers, function (provider) {
+							var test = provider.test;
+							var resolve = provider.resolve.bind({
+								async: function async() {
+									return function (content) {
+										return content instanceof Error ? fail(content) : done(content);
+									};
+								}
+							});
+
+							if (test(url, request)) {
+								matched = true;
+								var content = resolve(url, request);
+								if (typeof content !== 'undefined') {
+									done(content);
+								}
+
+								if (provider.sync === true) {
+									promise.then(function (content) {
+										console.log('sync data', content);
+										_this.state.syncData = JSON.parse(content);
+									}).catch(function (e) {
+										_this.state.syncData = {};
+									});
+								} else {
+									promise.then(function (content) {
+										console.log('async data', content);
+										_this.body = content;
+									}).catch(function (e) {
+										_this.body = '';
+									});
+								}
+
+								return false;
+							}
+
+							return true;
+						});
+
+						if (matched) {
+							_context.next = 7;
+							break;
+						}
+
+						_context.next = 6;
+						return next;
+
+					case 6:
+						return _context.abrupt('return', _context.sent);
+
+					case 7:
+					case 'end':
+						return _context.stop();
+				}
 			}
-		});
-
-		if (test(url, request)) {
-			matched = true;
-			var content = resolve(url, request);
-			if (typeof content !== 'undefined') {
-				done(content);
-			}
-			return false;
-		}
-
-		return true;
-	});
-
-	// this.state.syncData提供给后面的loaders使用
-	if (!matched) {
-		this.state.syncData = {};
-		return Promise.resolve();
-	}
-
-	return promise.then(function (content) {
-		try {
-			_this.state.syncData = JSON.parse(content);
-		} catch (e) {
-			_this.state.syncData = {};
-		}
-	});
-}
-
-function asyncProvider(providers) {
-	var _this = this;
-
-	var request = this.request;
-	var url = request.url;
-
-	var done = void 0;
-	var fail = void 0;
-	var promise = new Promise(function (resolve, reject) {
-		done = resolve;
-		fail = reject;
-	});
-
-	var matched = false;
-
-	each(providers, function (provider) {
-		var test = provider.test;
-		var resolve = provider.resolve.bind({
-			async: function async() {
-				return function (content) {
-					return content instanceof Error ? fail(content) : done(content);
-				};
-			}
-		});
-
-		if (test(url, request)) {
-			matched = true;
-			var content = resolve(url, request);
-			if (typeof content !== 'undefined') {
-				done(content);
-			}
-			return false;
-		}
-
-		return true;
-	});
-
-	if (!matched) {
-		return Promise.resolve();
-	}
-
-	return promise.then(function (content) {
-		_this.body = content;
+		}, _callee, this);
 	});
 }
 
@@ -2088,18 +2069,9 @@ var mock = (function (mockOptions) {
 			while (1) {
 				switch (_context.prev = _context.next) {
 					case 0:
-						_context.next = 2;
-						return syncProvider.call(this, ensureArray(mockOptions.sync));
+						return _context.abrupt('return', provider.call(this, mockOptions)(next));
 
-					case 2:
-						_context.next = 4;
-						return asyncProvider.call(this, ensureArray(mockOptions.async));
-
-					case 4:
-						_context.next = 6;
-						return next;
-
-					case 6:
+					case 1:
 					case 'end':
 						return _context.stop();
 				}
@@ -2121,7 +2093,7 @@ var logger$1 = (function (options) {
   return logger(options || {});
 });
 
-var index = (function (options) {
+var index = (function (options, cb) {
 	var app = koa();
 
 	// middlewares
@@ -2130,9 +2102,7 @@ var index = (function (options) {
 	app.use(loader(options));
 	app.use(serve$1(options.static));
 
-	app.listen(options.port, function () {
-		console.log('listening on port: ' + options.port);
-	});
+	app.listen(options.port, typeof cb === 'function' ? cb : function () {});
 });
 
 module.exports = index;
