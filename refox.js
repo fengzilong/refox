@@ -2024,13 +2024,13 @@ function provider (options) {
 								if (provider.sync === true) {
 									promise.then(function (content) {
 										_this.state.syncData = JSON.parse(content);
-									}).catch(function (e) {
+									}).catch(function () {
 										_this.state.syncData = {};
 									});
 								} else {
 									promise.then(function (content) {
 										_this.body = content;
-									}).catch(function (e) {
+									}).catch(function () {
 										_this.body = '';
 									});
 								}
@@ -2051,7 +2051,7 @@ function provider (options) {
 
 					case 12:
 						if (!(!matched || matched && isSync)) {
-							_context.next = 16;
+							_context.next = 15;
 							break;
 						}
 
@@ -2059,9 +2059,6 @@ function provider (options) {
 						return next;
 
 					case 15:
-						return _context.abrupt('return', _context.sent);
-
-					case 16:
 					case 'end':
 						return _context.stop();
 				}
@@ -2072,7 +2069,7 @@ function provider (options) {
 
 function mock (mockOptions) {
 	return provider(mockOptions);
-};
+}
 
 var serve$1 = (function (paths) {
 	var serves = [];
