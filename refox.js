@@ -2000,7 +2000,6 @@ function provider (options) {
 			while (1) {
 				switch (_context.prev = _context.next) {
 					case 0:
-						console.log('---');
 						matched = false;
 
 
@@ -2023,14 +2022,12 @@ function provider (options) {
 
 								if (provider.sync === true) {
 									promise.then(function (content) {
-										console.log('sync data', content);
 										_this.state.syncData = JSON.parse(content);
 									}).catch(function (e) {
 										_this.state.syncData = {};
 									});
 								} else {
 									promise.then(function (content) {
-										console.log('async data', content);
 										_this.body = content;
 									}).catch(function (e) {
 										_this.body = '';
@@ -2044,15 +2041,18 @@ function provider (options) {
 						});
 
 						if (matched) {
-							_context.next = 7;
+							_context.next = 6;
 							break;
 						}
 
-						_context.next = 6;
+						_context.next = 5;
 						return next;
 
-					case 6:
+					case 5:
 						return _context.abrupt('return', _context.sent);
+
+					case 6:
+						return _context.abrupt('return', promise);
 
 					case 7:
 					case 'end':
@@ -2069,9 +2069,10 @@ var mock = (function (mockOptions) {
 			while (1) {
 				switch (_context.prev = _context.next) {
 					case 0:
-						return _context.abrupt('return', provider.call(this, mockOptions)(next));
+						_context.next = 2;
+						return provider.call(this, mockOptions).call(this, next);
 
-					case 1:
+					case 2:
 					case 'end':
 						return _context.stop();
 				}
