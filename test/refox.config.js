@@ -2,17 +2,17 @@ const path = require( 'path' );
 
 module.exports = {
 	port: 5000,
-	verbose: true,
+	quiet: true,
 	debug: true,
 	mock: [
 		{
 			sync: true,
-			test: function( url, req ) {
-				if( /xxx/.test( url ) ) {
+			test: function( req ) {
+				if( /sync/.test( req.url ) ) {
 					return true;
 				}
 			},
-			resolve: function( url, req ) {
+			resolve: function( req ) {
 				var cb = this.async();
 				setTimeout(function() {
 					cb( '{ "youAreUsingPug": true, "foo": "bar" }' );
@@ -20,12 +20,12 @@ module.exports = {
 			}
 		},
 		{
-			test: function( url, req ) {
-				if( /async/.test( url ) ) {
+			test: function( req ) {
+				if( /async/.test( req.url ) ) {
 					return true
 				}
 			},
-			resolve: function( url, req ) {
+			resolve: function( req ) {
 				var cb = this.async();
 				setTimeout(function() {
 					cb( '321 delayed' );
@@ -35,19 +35,15 @@ module.exports = {
 	],
 	compile: [
 		{
-			test: function( url, req ) {
-				if( /xxx/.test( url ) ) {
-					return true;
-				}
-
-				if( /yyy/.test( url ) ) {
+			test: function( req ) {
+				if( /sync/.test( req.url ) ) {
 					return true;
 				}
 			},
 			loaders: [
 				'pug?root=' + path.resolve( __dirname, 'fixtures/views' )
 			],
-			local: function( url, req ) {
+			local: function( req ) {
 				return path.resolve( __dirname, 'fixtures/views/test.pug' );
 			}
 		}
@@ -55,4 +51,7 @@ module.exports = {
 	static: [
 		'lib'
 	],
+	remap: {
+		'res/*': path.resolve( __dirname, 'fixtures/assets' )
+	}
 };

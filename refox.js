@@ -1831,7 +1831,7 @@ function loader (options) {
 
 						compiler = compilers[i];
 
-						if (!compiler.test(request.url, request)) {
+						if (!compiler.test(request)) {
 							_context2.next = 12;
 							break;
 						}
@@ -1843,8 +1843,8 @@ function loader (options) {
 								while (1) {
 									switch (_context.prev = _context.next) {
 										case 0:
-											content = compiler.content && compiler.content(request.url, request);
-											filepath = compiler.local && compiler.local(request.url, request);
+											content = compiler.content && compiler.content(request);
+											filepath = compiler.local && compiler.local(request);
 											body = void 0;
 
 											if (!content) {
@@ -1984,14 +1984,13 @@ function provider (options) {
 	return regeneratorRuntime.mark(function _callee(next) {
 		var _this = this;
 
-		var providers, request, url, done, fail, promise, matched, isSync;
+		var providers, request, done, fail, promise, matched, isSync;
 		return regeneratorRuntime.wrap(function _callee$(_context) {
 			while (1) {
 				switch (_context.prev = _context.next) {
 					case 0:
 						providers = options;
 						request = this.request;
-						url = request.url;
 						done = void 0;
 						fail = void 0;
 						promise = new Promise(function (resolve, reject) {
@@ -2012,11 +2011,11 @@ function provider (options) {
 								}
 							});
 
-							if (test(url, request)) {
+							if (test(request)) {
 								matched = true;
 								isSync = provider.sync;
 
-								var content = resolve(url, request);
+								var content = resolve(request);
 								if (typeof content !== 'undefined') {
 									done(content);
 								}
@@ -2042,23 +2041,23 @@ function provider (options) {
 						});
 
 						if (!matched) {
-							_context.next = 12;
+							_context.next = 11;
 							break;
 						}
 
-						_context.next = 12;
+						_context.next = 11;
 						return promise;
 
-					case 12:
+					case 11:
 						if (!(!matched || matched && isSync)) {
-							_context.next = 15;
+							_context.next = 14;
 							break;
 						}
 
-						_context.next = 15;
+						_context.next = 14;
 						return next;
 
-					case 15:
+					case 14:
 					case 'end':
 						return _context.stop();
 				}

@@ -1,4 +1,4 @@
 const refox = require( './refox' );
-const options = require( './test/loader.config' );
+const options = require( './test/refox.config' );
 
 refox( options );
