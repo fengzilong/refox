@@ -28,6 +28,7 @@
   "dependencies": {
     "commander": "^2.9.0",
     "debug": "^2.2.0",
+    "get-port": "^2.1.0",
     "koa": "^1.2.2",
     "koa-compose": "^2.4.0",
     "koa-logger": "^1.3.0",
@@ -35,6 +36,7 @@
     "mz": "^2.4.0",
     "regenerator-runtime": "^0.9.5",
     "resolve-cwd": "^1.0.0",
+    "socket.io": "^1.4.8",
     "update-notifier": "^1.0.2"
   },
   "devDependencies": {

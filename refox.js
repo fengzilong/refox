@@ -3,6 +3,7 @@
 function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
 
 var koa = _interopDefault(require('koa'));
+var http = _interopDefault(require('http'));
 var fs = _interopDefault(require('fs'));
 var constants = _interopDefault(require('constants'));
 var stream = _interopDefault(require('stream'));
@@ -10,7 +11,8 @@ var util = _interopDefault(require('util'));
 var assert = _interopDefault(require('assert'));
 var serve = _interopDefault(require('koa-static'));
 var compose = _interopDefault(require('koa-compose'));
-var logger = _interopDefault(require('koa-logger'));
+var koaLogger = _interopDefault(require('koa-logger'));
+var socketio = _interopDefault(require('socket.io'));
 
 var commonjsGlobal = typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
 
@@ -1805,34 +1807,33 @@ var each = (function (v, fn) {
 	}
 });
 
-function loader (options) {
-	var compilers = options.compile;
-
+var loader = (function (options) {
 	return regeneratorRuntime.mark(function _callee2(next) {
 		var _this = this;
 
-		var request, syncData, matched, compiler, i, len, _ret;
+		var compilers, request, syncData, matched, compiler, i, len, _ret;
 
 		return regeneratorRuntime.wrap(function _callee2$(_context2) {
 			while (1) {
 				switch (_context2.prev = _context2.next) {
 					case 0:
+						compilers = options.compile;
 						request = this.request;
 						syncData = this.state.syncData || {};
 						matched = false;
 						compiler = void 0;
 						i = 0, len = compilers.length;
 
-					case 5:
+					case 6:
 						if (!(i < len)) {
-							_context2.next = 15;
+							_context2.next = 16;
 							break;
 						}
 
 						compiler = compilers[i];
 
 						if (!compiler.test(request)) {
-							_context2.next = 12;
+							_context2.next = 13;
 							break;
 						}
 
@@ -1945,40 +1946,40 @@ function loader (options) {
 									}
 								}
 							}, _callee, _this);
-						})(), 't0', 9);
+						})(), 't0', 10);
 
-					case 9:
+					case 10:
 						_ret = _context2.t0;
 
 						if (!(_ret === 'break')) {
-							_context2.next = 12;
+							_context2.next = 13;
 							break;
 						}
 
-						return _context2.abrupt('break', 15);
+						return _context2.abrupt('break', 16);
 
-					case 12:
+					case 13:
 						i++;
-						_context2.next = 5;
+						_context2.next = 6;
 						break;
 
-					case 15:
+					case 16:
 						if (matched) {
-							_context2.next = 18;
+							_context2.next = 19;
 							break;
 						}
 
-						_context2.next = 18;
+						_context2.next = 19;
 						return next;
 
-					case 18:
+					case 19:
 					case 'end':
 						return _context2.stop();
 				}
 			}
 		}, _callee2, this);
 	});
-}
+});
 
 function provider (options) {
 	return regeneratorRuntime.mark(function _callee(next) {
@@ -2079,20 +2080,32 @@ var serve$1 = (function (paths) {
 	return compose(serves);
 });
 
-var logger$1 = (function (options) {
-  return logger(options || {});
+var logger = (function (options) {
+	return koaLogger();
 });
 
-var index = (function (options, cb) {
+var app = (function (options) {
 	var app = koa();
 
 	// middlewares
-	app.use(logger$1());
+	app.use(logger());
 	app.use(mock(options.mock));
 	app.use(loader(options));
 	app.use(serve$1(options.static));
 
-	app.listen(options.port, typeof cb === 'function' ? cb : function () {});
+	return http.createServer(app.callback());
+});
+
+var io = socketio();
+io.on('connection', function () {
+	console.log('connected');
+	io.emit('an event', { some: 'data' });
+});
+
+var index = (function (options, cb) {
+	var server = app(options);
+	io.attach(server);
+	server.listen(options.port, typeof cb === 'function' ? cb : function () {});
 });
 
 module.exports = index;

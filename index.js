@@ -1,18 +1,9 @@
 import 'regenerator-runtime/runtime';
-import koa from 'koa';
-import loader from './lib/loader';
-import mock from './lib/mock';
-import serve from './lib/serve';
-import logger from './lib/logger';
+import app from './lib/app';
+import io from './lib/socket';
 
 export default ( options, cb ) => {
-	const app = koa();
-
-	// middlewares
-	app.use( logger() );
-	app.use( mock( options.mock ) );
-	app.use( loader( options ) );
-	app.use( serve( options.static ) );
-
-	app.listen( options.port, typeof cb === 'function' ? cb : () => {} );
+	const server = app( options );
+	io.attach( server );
+	server.listen( options.port, typeof cb === 'function' ? cb : () => {} );
 };
