@@ -13,6 +13,8 @@ var serve = _interopDefault(require('koa-static'));
 var compose = _interopDefault(require('koa-compose'));
 var koaLogger = _interopDefault(require('koa-logger'));
 var socketio = _interopDefault(require('socket.io'));
+var Watchpack = _interopDefault(require('watchpack'));
+var path = require('path');
 
 var commonjsGlobal = typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
 
@@ -1838,45 +1840,34 @@ var loader = (function (options) {
 						}
 
 						return _context2.delegateYield(regeneratorRuntime.mark(function _callee() {
-							var content, filepath, body, loaders, promise, _loop, j, loaderLen;
+							var filepath, body, loaders, promise, _loop, j, loaderLen;
 
 							return regeneratorRuntime.wrap(function _callee$(_context) {
 								while (1) {
 									switch (_context.prev = _context.next) {
 										case 0:
-											content = compiler.content && compiler.content(request);
 											filepath = compiler.local && compiler.local(request);
 											body = void 0;
 
-											if (!content) {
-												_context.next = 7;
-												break;
-											}
-
-											body = content;
-											_context.next = 11;
-											break;
-
-										case 7:
 											if (!filepath) {
-												_context.next = 11;
+												_context.next = 6;
 												break;
 											}
 
-											_context.next = 10;
+											_context.next = 5;
 											return fs$1.readFile(filepath);
 
-										case 10:
+										case 5:
 											body = _context.sent;
 
-										case 11:
+										case 6:
 
 											body = String(body);
 
 											// test通过，且body不为空
 
 											if (!body) {
-												_context.next = 23;
+												_context.next = 18;
 												break;
 											}
 
@@ -1934,13 +1925,13 @@ var loader = (function (options) {
 												throw err;
 											});
 
-											_context.next = 22;
+											_context.next = 17;
 											return promise;
 
-										case 22:
+										case 17:
 											return _context.abrupt('return', 'break');
 
-										case 23:
+										case 18:
 										case 'end':
 											return _context.stop();
 									}
@@ -2096,13 +2087,27 @@ var app = (function (options) {
 	return http.createServer(app.callback());
 });
 
+var w = new Watchpack({
+	aggregateTimeout: 1000,
+	poll: true,
+	ignored: /node_modules/
+});
+
 var io = socketio();
 io.on('connection', function () {
 	console.log('connected');
-	io.emit('an event', { some: 'data' });
+
+	w.on('change', function (filepath, mtime) {
+		console.log('changed', filepath);
+		io.emit('filechanged', { filepath: filepath });
+	});
 });
 
+var cwd = process.cwd();
+
 var index = (function (options, cb) {
+	// maybe also watch path from options
+	w.watch([], [cwd], Date.now());
 	var server = app(options);
 	io.attach(server);
 	server.listen(options.port, typeof cb === 'function' ? cb : function () {});

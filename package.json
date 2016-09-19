@@ -37,7 +37,8 @@
     "regenerator-runtime": "^0.9.5",
     "resolve-cwd": "^1.0.0",
     "socket.io": "^1.4.8",
-    "update-notifier": "^1.0.2"
+    "update-notifier": "^1.0.2",
+    "watchpack": "^1.1.0"
   },
   "devDependencies": {
     "babel-plugin-transform-regenerator": "^6.14.0",
