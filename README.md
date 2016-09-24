@@ -12,6 +12,10 @@
 	<a href="https://github.com/fengzilong/refox/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-MIT-000000.svg?style=flat-square" alt="license"></a>
 </p>
 
+## Status
+
+still under heavy development, don't use it currently
+
 ## Installation
 
 ```bash

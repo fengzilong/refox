@@ -2,7 +2,6 @@ import 'regenerator-runtime/runtime';
 import app from './lib/app';
 import io from './lib/socket';
 import watcher from './lib/watch';
-import path from 'path';
 
 const cwd = process.cwd();
 
