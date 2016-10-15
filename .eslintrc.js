@@ -1,5 +1,5 @@
 module.exports = {
-	extends: 'airbnb',
+	extends: 'airbnb-base',
 	rules: {
 		'linebreak-style': 'off',
 		'indent': [ 'error', 'tab' ],
@@ -10,8 +10,10 @@ module.exports = {
 		'space-in-parens': [ 'error', 'always' ],
 		'computed-property-spacing': [ 'error', 'always' ],
 		'array-bracket-spacing': [ 'error', 'always' ],
-		// es6
-		'require-yield': 'warn',
+		'no-tabs': 'off',
+		'no-plusplus': 'off',
+		'arrow-parens': [ 'error', 'as-needed' ],
+		'import/no-dynamic-require': 'off',
 	},
 	env: {
 		node: true,
