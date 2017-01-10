@@ -8,28 +8,28 @@ const external = Object.keys( pkg.dependencies );
 
 export default {
 	entry: 'index.js',
-	external: external,
+	external,
 	plugins: [
-		nodeResolve({
+		nodeResolve( {
 			main: true
-		}),
-		commonjs({
+		} ),
+		commonjs( {
 			include: 'node_modules/**'
-		}),
+		} ),
 		json(),
-		babel({
+		babel( {
 			exclude: 'node_modules/**',
 			babelrc: false,
 			presets: [
 				[
-					"es2015",
+					'es2015',
 					{
-						"modules": false
+						modules: false
 					}
 				]
 			],
-			plugins: [ "transform-regenerator" ]
-		})
+			plugins: [ 'transform-regenerator' ]
+		} )
 	],
 	targets: [
 		{
