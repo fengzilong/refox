@@ -11,7 +11,7 @@
     "build-watch": "nodemon -x \"npm run build\" --watch index.js --watch lib --watch test",
     "start-watch": "nodemon -x \"npm run start\" --watch refox.js",
     "build": "rollup -c",
-    "start": "node test",
+    "start": "cross-env DEBUG=koa* node test",
     "test": "npm run lint",
     "lint": "eslint index.js lib"
   },

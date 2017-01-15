@@ -46,7 +46,7 @@ module.exports = {
 		},
 	],
 	static: [
-		'lib'
+		path.resolve( __dirname, 'fixtures/assets' )
 	],
 	redirect: {
 		'res/*': path.resolve( __dirname, 'fixtures/assets' )
