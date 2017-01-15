@@ -13,15 +13,12 @@ module.exports = {
 				}
 			},
 			resolve: function( req ) {
-				var cb = this.async();
-				setTimeout(function() {
-					cb( '{ "youAreUsingPug": true, "foo": "bar" }' );
-				}, 1000);
+				return '{ "youAreUsingPug": true, "foo": "bar" }';
 			}
 		},
 		{
 			test: function( req ) {
-				if( /async/.test( req.url ) ) {
+				if( /abc/.test( req.url ) ) {
 					return true
 				}
 			},
@@ -46,12 +43,12 @@ module.exports = {
 			local: function( req ) {
 				return path.resolve( __dirname, 'fixtures/views/test.pug' );
 			}
-		}
+		},
 	],
 	static: [
 		'lib'
 	],
-	remap: {
+	redirect: {
 		'res/*': path.resolve( __dirname, 'fixtures/assets' )
 	}
 };
